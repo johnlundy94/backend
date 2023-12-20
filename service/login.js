@@ -4,6 +4,7 @@ AWS.configure.update({
 });
 const util = require("../utils/util");
 const bcrypt = require("bcryptjs");
+const auth = require("../utils/auth");
 
 const dynamodb = new AWS.DynamoBD.DocumentClient();
 const userTable = "fitness-app-users";
@@ -30,4 +31,33 @@ async function login(user) {
     username: dynamoUser.username,
     name: dynamoUser.name,
   };
+  const token = auth.generateToken(userInfo);
+  const response = {
+    user: userInfo,
+    token: token,
+  };
+  return util.buildResponse(200, response);
 }
+
+async function getUser(username) {
+  const params = {
+    TableName: userTable,
+    Key: {
+      username: username,
+    },
+  };
+
+  return await dynamodb
+    .get(params)
+    .promise()
+    .then(
+      (response) => {
+        return response.Item;
+      },
+      (error) => {
+        console.error("Error getting user: ", error);
+      }
+    );
+}
+
+module.exports.login = login;
