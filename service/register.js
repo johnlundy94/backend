@@ -50,17 +50,13 @@ async function getUser(username) {
     },
   };
 
-  return await dynamodb
-    .get(params)
-    .promise()
-    .then(
-      (response) => {
-        return response.Item;
-      },
-      (error) => {
-        console.error("Error getting user: ", error);
-      }
-    );
+  try {
+    const response = await dynamodb.get(params).promise();
+    return response.Item;
+  } catch (error) {
+    console.error("Error getting user: ", error);
+    return null;
+  }
 }
 
 async function saveUser(user) {
@@ -68,14 +64,13 @@ async function saveUser(user) {
     TableName: userTable,
     Item: user,
   };
-  return await dynamodb.put(params).promise.then(
-    () => {
-      return true;
-    },
-    (error) => {
-      console.error("Error saving user: ", error);
-    }
-  );
+  try {
+    await dynamodb.put(params).promise();
+    return true;
+  } catch (error) {
+    console.error("Error saving user: ", error);
+    return false;
+  }
 }
 
 module.exports.register = register;
