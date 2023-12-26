@@ -1,12 +1,12 @@
 const AWS = require("aws-sdk");
-AWS.configure.update({
-  region: "us-east-1",
+AWS.config.update({
+  region: "us-east-2",
 });
 const util = require("../utils/util");
 const bcrypt = require("bcryptjs");
 const auth = require("../utils/auth");
 
-const dynamodb = new AWS.DynamoBD.DocumentClient();
+const dynamodb = new AWS.DynamoDB.DocumentClient();
 const userTable = "fitness-app-users";
 
 async function login(user) {

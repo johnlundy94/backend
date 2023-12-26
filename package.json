@@ -3,6 +3,7 @@
     "author": "Lundy",
     "version": "1.0.0",
     "dependencies": {
+        "aws-sdk": "^2.1525.0",
         "bcryptjs": "2.4.3",
         "jsonwebtoken": "9.0.2"
     }
