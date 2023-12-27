@@ -47,17 +47,13 @@ async function getUser(username) {
     },
   };
 
-  return await dynamodb
-    .get(params)
-    .promise()
-    .then(
-      (response) => {
-        return response.Item;
-      },
-      (error) => {
-        console.error("Error getting user: ", error);
-      }
-    );
+  try {
+    const response = await dynamodb.get(params).promise();
+    return response.Item;
+  } catch (error) {
+    console.error("Error getting user: ", error);
+    return null;
+  }
 }
 
 module.exports.login = login;
